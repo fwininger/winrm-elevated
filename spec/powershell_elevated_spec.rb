@@ -83,4 +83,14 @@ describe 'powershell elevated runner', integration: true do # rubocop: disable M
       expect(output.output).to eq("Hello\r\n, world!\r\n")
     end
   end
+
+  describe 'password with complexe single quote' do
+    subject(:output) do
+      elevated_shell.username = 'Administrator'
+      elevated_shell.password = "'"
+      elevated_shell.run('ipconfig')
+    end
+    it { should have_exit_code 0 }
+    it { should have_no_stderr }
+  end
 end
