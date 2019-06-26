@@ -83,7 +83,7 @@ while ( (!($registered_task.state -eq 4)) -and ($sec -lt $timeout) ) {
 
 function SlurpOutput($file, $cur_line, $out_type) {
   if (Test-Path $file) {
-    get-content $file | select -skip $cur_line | ForEach {
+    get-content $file | Select-Object -skip $cur_line | ForEach-Object {
       $cur_line += 1
       if ($out_type -eq 'err') {
         $host.ui.WriteErrorLine("$_")
@@ -99,8 +99,8 @@ $err_cur_line = 0
 $out_cur_line = 0
 do {
   Start-Sleep -m 100
-  $out_cur_line = SlurpOutput $out_file $out_cur_line 'out'
-  $err_cur_line = SlurpOutput $err_file $err_cur_line 'err'
+  $out_cur_line = SlurpOutput($out_file, $out_cur_line, 'out')
+  $err_cur_line = SlurpOutput($err_file, $err_cur_line, 'err')
 } while (!($registered_task.state -eq 3))
 
 # We'll make a best effort to clean these files
